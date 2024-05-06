@@ -1,10 +1,11 @@
 ## Steps To Run the Project
 
-1. Run the Command to clone the repo
+1. Run the Command to clone the repo and cd into it
 ```bash
 git clone https://github.com/thedevhack/Vendor-Management-System.git
+cd Vendor-Management-System
 ```
-2. Create the environment of Python depending on your Operating System
+2. Create the environment of Python depending on your Operating System (NOTE: You should have python installed on your computer)
 ```bash
 virtualenv venv - Linux
 ```
