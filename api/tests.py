@@ -1,3 +1,4 @@
+import time
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -24,6 +25,7 @@ class VendorPerformanceAPITestCase(TestCase):
                                          items={"thing": "something"},
                                          quantity=11,
                                          status="Pending")
+        time.sleep(1)
         acknowledge_url = reverse('po_acknowledge', kwargs={'id': 2})
         self.client.post(acknowledge_url)
         acknowledge_url = reverse('po_acknowledge', kwargs={'id': 3})
