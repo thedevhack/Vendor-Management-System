@@ -37,7 +37,7 @@ python manage.py runserver
 ```
 
 ## To Run the Test suite
-### This test will add 1 vendor and make 4 purchase order request regarding that Vendor 2 purchase order will be acknowledged and 1 purchase order will be completed and then the vendor perfromance will be printed
+### This test will add 1 vendor and make 4 purchase order request regarding that Vendor 2 purchase order will be acknowledged and 1 purchase order will be completed and then the vendor perfromance will be printed and for average response time to show up i have added a time sleep of 1second before acknowledgement as it was not showing due to so little time between purchase order creation and acknowledgement
 
 Performance Metrics units description
 1. on_time_delivery_rate - shown as a float value between 0 to 1.0 where 1.0 means all orders are completed ontime
