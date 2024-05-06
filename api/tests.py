@@ -4,8 +4,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-from django.db.models.signals import post_save
-from .signals import update_on_time_delivery_rate, update_quality_rating_avg, update_fulfillment_ratio
 from .models import Vendor, PurchaseOrder
 
 
@@ -37,11 +35,6 @@ class VendorPerformanceAPITestCase(TestCase):
                                              'status': 'Completed',
                                              'quality_rating': 7}, format='json')
         self.po = PurchaseOrder.objects.get(id=2)
-        update_on_time_delivery_rate(sender=PurchaseOrder, instance=self.po)
-        update_quality_rating_avg(sender=PurchaseOrder, instance=self.po)
-        update_fulfillment_ratio(sender=PurchaseOrder, instance=self.po)
-
-        # self.po.save()
         response = self.client.get(reverse('po_detail', kwargs={'id': 2}))
         print("on_time_delivery_rate -> ", Vendor.objects.get(id=response.data['vendor']).on_time_delivery_rate)
         print("quality_rating_avg -> ", Vendor.objects.get(id=response.data['vendor']).quality_rating_avg)
