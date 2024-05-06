@@ -82,7 +82,13 @@ class AcknowledgeAPIView(APIView):
         instance.acknowledgment_date = timezone.now()
         instance.save()
 
-        # Average Response Time Calculations
+        """
+            response time depends on seconds taken from issue date 
+            till the vendor acknowledges the purchase and start the
+            process to deliver it and we have taken averages
+            of all such response times to get average response
+            time of a vendor
+        """
         average_response_time = PurchaseOrder.objects.filter(
             vendor=instance.vendor,
             acknowledgment_date__isnull=False

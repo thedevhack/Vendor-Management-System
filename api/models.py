@@ -1,5 +1,4 @@
 import uuid
-from datetime import timedelta
 from django.utils import timezone
 from django.db import models
 from django.core.validators import MinValueValidator
@@ -37,7 +36,7 @@ class PurchaseOrder(models.Model):
     po_number = models.CharField(max_length=120, default=uuid.uuid4, unique=True, blank=True)
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    delivery_date = models.DateTimeField()
+    delivery_date = models.DateTimeField(null=True)
     items = models.JSONField()
     quantity = models.IntegerField(validators=[MinValueValidator(0)])
     status = models.CharField(max_length=30, choices=PURCHASE_STATUS, default="pending")
@@ -46,6 +45,6 @@ class PurchaseOrder(models.Model):
     acknowledgment_date = models.DateTimeField(null=True)
 
     def save(self, *args, **kwargs):
-        if not self.delivery_date:
-            self.delivery_date = timezone.now() + timedelta(days=(int(self.quantity))//5 + 1)
+        if self.status == "Completed":
+            self.delivery_date = timezone.now()
         super().save(*args, **kwargs)

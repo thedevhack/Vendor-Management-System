@@ -8,6 +8,20 @@ from .models import PurchaseOrder
 
 @receiver(post_save, sender=PurchaseOrder)
 def update_on_time_delivery_rate(sender, instance, **kwargs):
+    """
+    On time delivery rate is calculated on basis of that the time
+    at which status is changed to completed at that time delivery date
+    is set, and we calculate what should have been the expected delivery
+    date according to number of items it is 1 day greater than number of items
+    divided by 5 (i.e. in 1day we can deliver 5 items and 1day for slack)
+    and then we use filter to get all orders where delivery date was less
+    than or equal to our expected delivery date divided by total completed
+    orders
+    :param sender:
+    :param instance:
+    :param kwargs:
+    :return None:
+    """
 
     if instance.status == "Completed":
         total_completed_orders = PurchaseOrder.objects.filter(
@@ -32,6 +46,14 @@ def update_on_time_delivery_rate(sender, instance, **kwargs):
 
 @receiver(post_save, sender=PurchaseOrder)
 def update_quality_rating_avg(sender, instance, **kwargs):
+    """
+    quality rating average is average of all ratings given to vendor
+    for the purchase orders excluding orders where no rating was given
+    :param sender:
+    :param instance:
+    :param kwargs:
+    :return None:
+    """
 
     if instance.status == "Completed" and instance.quality_rating is not None:
         vendor = instance.vendor
@@ -47,6 +69,14 @@ def update_quality_rating_avg(sender, instance, **kwargs):
 @receiver(post_save, sender=PurchaseOrder)
 @receiver(post_delete, sender=PurchaseOrder)
 def update_fulfillment_ratio(sender, instance=None, **kwargs):
+    """
+    it is the ratio of how many orders were completed successfully to the
+    total number of orders
+    :param sender:
+    :param instance:
+    :param kwargs:
+    :return:
+    """
     total_po_count = PurchaseOrder.objects.filter(
         vendor=instance.vendor).count()
     fulfilled_po_count = PurchaseOrder.objects.filter(
