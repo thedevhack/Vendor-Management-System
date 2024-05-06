@@ -6,18 +6,22 @@ git clone https://github.com/thedevhack/Vendor-Management-System.git
 cd Vendor-Management-System
 ```
 2. Create the environment of Python depending on your Operating System (NOTE: You should have python installed on your computer)
+### For Linux
 ```bash
-virtualenv venv - Linux
+virtualenv venv
 ```
+### For Windows
 ```bash
-python -m venv venv - Windows
+python -m venv venv
 ```
 3. Activate the Virtual Environment
+### For Linux
 ```bash
-source venv/bin/activate - Linux
+source venv/bin/activate
 ```
+### For Windows
 ```bash
-venv\Scripts\activate - Windows
+venv\Scripts\activate
 ```
 4. Pip install all the python modules required using pip
 ```bash
