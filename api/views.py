@@ -94,7 +94,6 @@ class AcknowledgeAPIView(APIView):
         ).aggregate(
             total_time=Avg('response_times')
         )
-        print("response time here is", average_response_time)
 
         average_response_time_value = average_response_time.get('total_time', timedelta())
         average_response_time_seconds = average_response_time_value.total_seconds()

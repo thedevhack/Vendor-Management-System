@@ -13,7 +13,7 @@ class PurchaseOrderSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = PurchaseOrder
-        fields = ['id', 'vendor', 'items', 'quantity', 'status']
+        fields = ['id', 'vendor', 'items', 'quantity', 'status', 'quality_rating']
 
 
 class VendorPerformanceSerializer(serializers.ModelSerializer):
