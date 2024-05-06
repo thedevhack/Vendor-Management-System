@@ -1,5 +1,6 @@
 import uuid
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from django.db import models
 from django.core.validators import MinValueValidator
 
@@ -45,5 +46,6 @@ class PurchaseOrder(models.Model):
     acknowledgment_date = models.DateTimeField(null=True)
 
     def save(self, *args, **kwargs):
-        self.delivery_date = datetime.now() + timedelta(days=(int(self.quantity))//5 + 1)
+        if not self.delivery_date:
+            self.delivery_date = timezone.now() + timedelta(days=(int(self.quantity))//5 + 1)
         super().save(*args, **kwargs)

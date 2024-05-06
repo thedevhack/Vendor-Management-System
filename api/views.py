@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -44,14 +45,14 @@ class RetrieveUpdateDeletePurchaseAPIView(generics.RetrieveUpdateDestroyAPIView)
     serializer_class = PurchaseOrderSerializer
     lookup_field = 'id'
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        if 'status' in request.data:
-            instance.status = request.data['status']
-        self.perform_update(serializer)
-        return Response(serializer.data)
+    # def update(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=True)
+    #     serializer.is_valid(raise_exception=True)
+    #     if 'status' in request.data:
+    #         instance.status = request.data['status']
+    #     self.perform_update(serializer)
+    #     return Response(serializer.data)
 
 
 class VendorPerformanceRetrieveAPIView(generics.RetrieveAPIView):
@@ -78,7 +79,7 @@ class AcknowledgeAPIView(APIView):
         if instance.acknowledgment_date:
             return Response({'error': 'Already Acknowledged'}, status=status.HTTP_400_BAD_REQUEST)
 
-        instance.acknowledgment_date = datetime.now()
+        instance.acknowledgment_date = timezone.now()
         instance.save()
 
         # Average Response Time Calculations
@@ -93,11 +94,9 @@ class AcknowledgeAPIView(APIView):
         ).aggregate(
             total_time=Avg('response_times')
         )
+        print("response time here is", average_response_time)
 
         average_response_time_value = average_response_time.get('total_time', timedelta())
-        # If average_response_time_value is None or empty, set a default timedelta
-
-        # Convert timedelta to seconds and then to float
         average_response_time_seconds = average_response_time_value.total_seconds()
         average_response_time_float = average_response_time_seconds\
             if average_response_time_seconds is not None else 0.0
